@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>For You ❤️</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <style>
     * { box-sizing: border-box; }
@@ -44,7 +44,8 @@
       margin-top: 10px;
     }
 
-    button {
+    /* Reusable button styles */
+    .btn {
       flex: 1;
       font-size: 1.05rem;
       padding: 14px;
@@ -54,16 +55,25 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    .yes {
+    .btn--primary {
       background: #ffffff;
       color: #ff4d6d;
       font-weight: 700;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.15);
     }
 
-    .no {
+    .btn--ghost {
       background: rgba(255,255,255,0.3);
       color: white;
       position: relative;
+    }
+
+    /* Smaller button variant (for replay) */
+    .btn--small {
+      flex: 0 0 auto;        /* don't stretch */
+      font-size: 0.95rem;
+      padding: 10px 16px;
+      border-radius: 22px;
     }
 
     .footer {
@@ -79,6 +89,8 @@
       font-size: 18px;
       animation: floatUp linear infinite;
       opacity: 0.8;
+      user-select: none;
+      pointer-events: none;
     }
 
     @keyframes floatUp {
@@ -99,8 +111,8 @@
     <h1>Will you be my Valentine? 💖</h1>
 
     <div class="buttons">
-      <button class="yes" onclick="yesClicked()">Yes 💕</button>
-      <button class="no" id="noBtn">No 🙈</button>
+      <button class="btn btn--primary" onclick="yesClicked()">Yes 💕</button>
+      <button class="btn btn--ghost" id="noBtn">No 🙈</button>
     </div>
 
     <div class="footer">From your husband, always ❤️</div>
@@ -109,139 +121,118 @@
   <script>
     /* YES click */
     function yesClicked() {
+      const photos = [
+        "photo1.jpg",
+        "photo2.JPG",
+        "photo3.PNG",
+        "photo4.JPG",
+        "photo5.jpg",
+        "photo6.PNG",
+        "photo7.jpg",
+        "photo8.jpg",
+        "photo9.PNG"
+      ];
 
-  const photos = [
-    "photo1.jpg",
-    "photo2.JPG",
-    "photo3.PNG",
-    "photo4.JPG",
-    "photo5.jpg",
-    "photo6.PNG",
-    "photo7.jpg",
-    "photo8.jpg",
-    "photo9.PNG"
-  ];
+      let index = 0;
+      let hasReplayed = false;
 
-  let index = 0;
-  let hasReplayed = false;
+      document.body.innerHTML = `
+        <div id="slideshow" style="
+          height:100vh;
+          display:flex;
+          flex-direction:column;
+          justify-content:center;
+          align-items:center;
+          text-align:center;
+          padding:20px;
+          color:white;
+        ">
+          <img id="slide" src="${photos[0]}" alt="Our photo" style="
+            width:90%;
+            max-width:380px;
+            border-radius:20px;
+            box-shadow:0 15px 40px rgba(0,0,0,0.3);
+            opacity:1;
+            transition:opacity 1s ease;
+          ">
+        </div>
+      `;
 
-  document.body.innerHTML = `
-    <div id="slideshow" style="
-      height:100vh;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      align-items:center;
-      text-align:center;
-      padding:20px;
-      color:white;
-    ">
+      const slide = document.getElementById("slide");
 
-      <img id="slide" src="${photos[0]}" style="
-        width:90%;
-        max-width:380px;
-        border-radius:20px;
-        box-shadow:0 15px 40px rgba(0,0,0,0.3);
-        opacity:1;
-        transition:opacity 1s ease;
-      ">
+      function playSlideshow() {
+        const interval = setInterval(() => {
+          slide.style.opacity = 0;
 
-    </div>
-  `;
+          setTimeout(() => {
+            index++;
 
-  const slide = document.getElementById("slide");
+            if (index >= photos.length) {
+              clearInterval(interval);
+              showFinalMessage();
+              return;
+            }
 
-  function playSlideshow() {
-    const interval = setInterval(() => {
-
-      slide.style.opacity = 0;
-
-      setTimeout(() => {
-        index++;
-
-        if (index >= photos.length) {
-          clearInterval(interval);
-          showFinalMessage();
-          return;
-        }
-
-        slide.src = photos[index];
-        slide.style.opacity = 1;
-
-      }, 500);
-
-    }, 2500);
-  }
-
-  function showFinalMessage() {
-  document.body.innerHTML = `
-    <div style="
-      height:100vh;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      align-items:center;
-      text-align:center;
-      padding:20px;
-      color:white;
-    ">
-
-      <h1 style="
-        font-size:2rem;
-        margin-bottom:10px;
-      ">
-        I love you ❤️
-      </h1>
-
-      <p style="
-        font-size:1.2rem;
-        max-width:360px;
-        line-height:1.4;
-        margin-bottom:25px;
-      ">
-        Distance doesn't matter for us.<br>
-        Happy Valentine's Day 💐
-      </p>
-
-      ${
-        hasReplayed
-          ? ""
-          : `<button id="replayBtn" style="
-              padding:12px 22px;
-              font-size:15px;
-              border:none;
-              border-radius:30px;
-              background:white;
-              color:#ff4d6d;
-              font-weight:bold;
-              cursor:pointer;
-            ">
-              Wanna see the photos again? 💕
-            </button>`
+            slide.src = photos[index];
+            slide.style.opacity = 1;
+          }, 500);
+        }, 2500);
       }
 
-    </div>
-  `;
+      function showFinalMessage() {
+        document.body.innerHTML = `
+          <div style="
+            height:100vh;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+            text-align:center;
+            padding:20px;
+            color:white;
+          ">
+            <h1 style="
+              font-size:2rem;
+              margin-bottom:10px;
+            ">
+              I love you ❤️
+            </h1>
 
-  const replayBtn = document.getElementById("replayBtn");
+            <p style="
+              font-size:1.2rem;
+              max-width:360px;
+              line-height:1.4;
+              margin-bottom:20px;
+            ">
+              Distance doesn't matter for us.<br>
+              Happy Valentine's Day 💐
+            </p>
 
-  if (replayBtn) {
-    replayBtn.onclick = () => {
-      hasReplayed = true;
-      index = 0;
-      yesClicked();
-    };
-  }
-}
+            ${
+              hasReplayed
+                ? ""
+                : `<button id="replayBtn" class="btn btn--primary btn--small" style="margin-top:6px;">
+                     Wanna see the photos again? 💕
+                   </button>`
+            }
+          </div>
+        `;
 
+        const replayBtn = document.getElementById("replayBtn");
+        if (replayBtn) {
+          replayBtn.onclick = () => {
+            hasReplayed = true;
+            index = 0;
+            yesClicked();
+          };
+        }
+      }
 
-  playSlideshow();
-}
-
+      playSlideshow();
+    }
 
     /* NO button runs away */
     const noBtn = document.getElementById("noBtn");
-
     noBtn.addEventListener("touchstart", moveNoButton);
     noBtn.addEventListener("mouseover", moveNoButton);
 
@@ -259,14 +250,9 @@
       heart.style.left = Math.random() * 100 + "vw";
       heart.style.animationDuration = (4 + Math.random() * 4) + "s";
       heart.style.fontSize = (14 + Math.random() * 20) + "px";
-
       document.body.appendChild(heart);
-
-      setTimeout(() => {
-        heart.remove();
-      }, 8000);
+      setTimeout(() => heart.remove(), 8000);
     }
-
     setInterval(createHeart, 350);
   </script>
 </body>
