@@ -123,57 +123,114 @@
   ];
 
   let index = 0;
+  let hasReplayed = false;
 
   document.body.innerHTML = `
-    <div id="gallery" style="
+    <div id="slideshow" style="
       height:100vh;
       display:flex;
       flex-direction:column;
       justify-content:center;
       align-items:center;
-      padding:20px;
       text-align:center;
+      padding:20px;
       color:white;
     ">
-      <h1>I love you ❤️</h1>
 
       <img id="slide" src="${photos[0]}" style="
         width:90%;
-        max-width:360px;
-        border-radius:18px;
-        margin:15px 0;
-        box-shadow:0 10px 30px rgba(0,0,0,0.3);
+        max-width:380px;
+        border-radius:20px;
+        box-shadow:0 15px 40px rgba(0,0,0,0.3);
+        opacity:1;
+        transition:opacity 1s ease;
       ">
 
-      <div>
-        <button onclick="prevPhoto()" style="
-          padding:12px 20px;
-          margin:5px;
-          border:none;
-          border-radius:25px;
-          font-size:16px;
-        ">⬅ Prev</button>
-
-        <button onclick="nextPhoto()" style="
-          padding:12px 20px;
-          margin:5px;
-          border:none;
-          border-radius:25px;
-          font-size:16px;
-        ">Next ➡</button>
-      </div>
     </div>
   `;
 
-  window.nextPhoto = function () {
-    index = (index + 1) % photos.length;
-    document.getElementById("slide").src = photos[index];
-  };
+  const slide = document.getElementById("slide");
 
-  window.prevPhoto = function () {
-    index = (index - 1 + photos.length) % photos.length;
-    document.getElementById("slide").src = photos[index];
-  };
+  function playSlideshow() {
+    const interval = setInterval(() => {
+
+      slide.style.opacity = 0;
+
+      setTimeout(() => {
+        index++;
+
+        if (index >= photos.length) {
+          clearInterval(interval);
+          showFinalMessage();
+          return;
+        }
+
+        slide.src = photos[index];
+        slide.style.opacity = 1;
+
+      }, 500);
+
+    }, 2500);
+  }
+
+  function showFinalMessage() {
+    document.body.innerHTML = `
+      <div style="
+        height:100vh;
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        align-items:center;
+        text-align:center;
+        padding:25px;
+        color:white;
+      ">
+
+        <h1 style="font-size:2rem;">
+          I love you ❤️
+        </h1>
+
+        <p style="
+          font-size:1.2rem;
+          max-width:360px;
+          margin:15px 0 25px;
+          line-height:1.4;
+        ">
+          Distance doesn't matter for us.<br>
+          Happy Valentine's Day 💐
+        </p>
+
+        ${
+          hasReplayed
+            ? ""
+            : `<button id="replayBtn" style="
+                padding:14px 24px;
+                font-size:16px;
+                border:none;
+                border-radius:30px;
+                background:white;
+                color:#ff4d6d;
+                font-weight:bold;
+              ">
+                Wanna see the photos again? 💕
+              </button>`
+        }
+
+      </div>
+    `;
+
+    const replayBtn = document.getElementById("replayBtn");
+
+    if (replayBtn) {
+      replayBtn.onclick = () => {
+        hasReplayed = true;
+        index = 0;
+        yesClicked(); // restart slideshow once
+      };
+    }
+  }
+
+  playSlideshow();
 }
 
 
