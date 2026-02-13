@@ -109,22 +109,73 @@
   <script>
     /* YES click */
     function yesClicked() {
-      document.body.innerHTML = `
-        <div style="
-          text-align:center;
-          color:white;
-          padding:20px;
-          max-width:360px;
-          z-index:2;
-        ">
-          <h1 style="font-size:2rem;">I love you ❤️</h1>
-          <p style="font-size:1.1rem;">
-            Distance doesn’t change us.<br>
-            Happy Valentine’s Day 💐
-          </p>
-        </div>
-      `;
-    }
+
+  const photos = [
+    "photo1.jpg",
+    "photo2.JPG",
+    "photo3.PNG",
+    "photo4.JPG",
+    "photo5.jpg",
+    "photo6.PNG",
+    "photo7.jpg",
+    "photo8.jpg",
+    "photo9.PNG"
+  ];
+
+  let index = 0;
+
+  document.body.innerHTML = `
+    <div id="gallery" style="
+      height:100vh;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      padding:20px;
+      text-align:center;
+      color:white;
+    ">
+      <h1>I love you ❤️</h1>
+
+      <img id="slide" src="${photos[0]}" style="
+        width:90%;
+        max-width:360px;
+        border-radius:18px;
+        margin:15px 0;
+        box-shadow:0 10px 30px rgba(0,0,0,0.3);
+      ">
+
+      <div>
+        <button onclick="prevPhoto()" style="
+          padding:12px 20px;
+          margin:5px;
+          border:none;
+          border-radius:25px;
+          font-size:16px;
+        ">⬅ Prev</button>
+
+        <button onclick="nextPhoto()" style="
+          padding:12px 20px;
+          margin:5px;
+          border:none;
+          border-radius:25px;
+          font-size:16px;
+        ">Next ➡</button>
+      </div>
+    </div>
+  `;
+
+  window.nextPhoto = function () {
+    index = (index + 1) % photos.length;
+    document.getElementById("slide").src = photos[index];
+  };
+
+  window.prevPhoto = function () {
+    index = (index - 1 + photos.length) % photos.length;
+    document.getElementById("slide").src = photos[index];
+  };
+}
+
 
     /* NO button runs away */
     const noBtn = document.getElementById("noBtn");
