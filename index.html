@@ -174,61 +174,66 @@
   }
 
   function showFinalMessage() {
-    document.body.innerHTML = `
-      <div style="
-        height:100vh;
-        display:flex;
-        flex-direction:column;
-        justify-content:center;
-        align-items:center;
-        text-align:center;
-        padding:25px;
-        color:white;
+  document.body.innerHTML = `
+    <div style="
+      height:100vh;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      padding:20px;
+      color:white;
+    ">
+
+      <h1 style="
+        font-size:2rem;
+        margin-bottom:10px;
       ">
+        I love you ❤️
+      </h1>
 
-        <h1 style="font-size:2rem;">
-          I love you ❤️
-        </h1>
+      <p style="
+        font-size:1.2rem;
+        max-width:360px;
+        line-height:1.4;
+        margin-bottom:25px;
+      ">
+        Distance doesn't matter for us.<br>
+        Happy Valentine's Day 💐
+      </p>
 
-        <p style="
-          font-size:1.2rem;
-          max-width:360px;
-          margin:15px 0 25px;
-          line-height:1.4;
-        ">
-          Distance doesn't matter for us.<br>
-          Happy Valentine's Day 💐
-        </p>
+      ${
+        hasReplayed
+          ? ""
+          : `<button id="replayBtn" style="
+              padding:12px 22px;
+              font-size:15px;
+              border:none;
+              border-radius:30px;
+              background:white;
+              color:#ff4d6d;
+              font-weight:bold;
+              cursor:pointer;
+            ">
+              Wanna see the photos again? 💕
+            </button>`
+      }
 
-        ${
-          hasReplayed
-            ? ""
-            : `<button id="replayBtn" style="
-                padding:14px 24px;
-                font-size:16px;
-                border:none;
-                border-radius:30px;
-                background:white;
-                color:#ff4d6d;
-                font-weight:bold;
-              ">
-                Wanna see the photos again? 💕
-              </button>`
-        }
+    </div>
+  `;
 
-      </div>
-    `;
+  const replayBtn = document.getElementById("replayBtn");
 
-    const replayBtn = document.getElementById("replayBtn");
-
-    if (replayBtn) {
-      replayBtn.onclick = () => {
-        hasReplayed = true;
-        index = 0;
-        yesClicked(); // restart slideshow once
-      };
-    }
+  if (replayBtn) {
+    replayBtn.onclick = () => {
+      hasReplayed = true;
+      index = 0;
+      yesClicked();
+    };
   }
+}
+
 
   playSlideshow();
 }
